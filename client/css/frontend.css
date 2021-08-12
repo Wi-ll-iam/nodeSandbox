@@ -1,0 +1,144 @@
+.container{
+
+}
+
+.d3Container{
+    display: flex;
+    margin: 25px auto;
+    width: 80%;
+
+}
+
+.d3SidebarContainer{
+    order: 1;
+    background-color: #004E7B;
+    min-width: 250px;
+    padding: 20px;
+}
+
+.d3TableContainer{
+    order: 2;
+    background-color: white;
+    padding: 20px;
+    width: 100%;
+}
+
+.lettermarkContainer{
+    margin-bottom: 25px;
+}
+
+.tabContainer{
+    margin-bottom: 10px;
+    cursor: pointer;
+}
+
+.iconContainer{
+    display: inline-block;
+}
+
+.searchContainer{
+    display: flex;
+    margin-top: 35px;
+}
+
+.searchInputContainer{
+    order: 1;
+    min-width: 545px;
+}
+
+.searchFieldsContainer{
+    order: 2;
+    min-width: 200px;
+}
+
+.searchButtonsContainer{
+    order: 3;
+}
+
+.tabHeader{
+    font-family: "HelveticaNeue-Light";
+    font-size: 20px;
+    color: #767676;
+    margin-left: 10px;
+}
+
+.tableHeader{
+    font-family: "HelveticaNeue-Bold";
+    font-size: 35px;
+}
+
+.secondaryHeader{
+    font-family: "HelveticaNeue-Bold";
+    font-size: 20px;
+}
+
+.tableResultsContainer{
+    margin-top: 25px;;
+}
+
+.lettermarkImage{
+    height: 50px;
+}
+
+.iconImage{
+    margin: auto;
+    height: 15px;
+    width: 15px;
+}
+
+.searchInput{
+    display: block;
+    border: none;
+    width: 250px;
+    font-family: "Arial";
+    font-size: 15px;
+    margin-top: 20px;
+}
+
+.searchFields{
+    display: block;
+    border: none;
+    width: 175px;
+    font-family: "Arial";
+    font-size: 15px;
+    color: #767676;
+    margin-top: 20px;
+    cursor: pointer;
+}
+
+.d3Button{
+    border: none;
+    background-color: #004E7B;
+    color: white;
+    font-family: "HelveticaNeue-Bold";
+    font-size: 20px;
+    margin-top: 20px;
+    min-width: 150px;
+    min-height: 40px;
+    cursor: pointer;
+}
+
+.d3Table{
+
+}
+
+.d3Table th{
+    font-family: "HelveticaNeue-Bold";
+    font-size: 15px;
+    color: #767676;
+    padding-right: 20px;
+    padding-bottom: 10px;
+    text-align: left;
+}
+
+.d3Table td{
+    font-family: "Arial";
+    font-size: 13px;
+    color: #767676;
+    padding-right: 20px;
+    text-align: left;
+}
+
+*:focus {
+    outline: none;
+}
