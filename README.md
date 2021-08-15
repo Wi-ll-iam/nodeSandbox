@@ -1,15 +1,8 @@
 # nodeSandbox
 
-.env file needed for configuration with the following variables included: <br />
-NODE_ENV= <br />
+.env file needed for configuration with the following variables included (values are only examples): <br />
 ```
 NODE_ENV=development
-```
-PORT= <br />
-```
-PORT=4000
-```
-MONGOOSE_CONNECTION= <br />
-```
+PORT=5000
 MONGOOSE_CONNECTION=mongodb://localhost/sandbox
 ```
