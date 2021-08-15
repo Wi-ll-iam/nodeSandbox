@@ -7,6 +7,7 @@ const app = express();
 const startupDebugger = require(`debug`)(`app:startup`);
 const genres = require(`./routes/genres`);
 const { boolean } = require("joi");
+const { permittedCrossDomainPolicies } = require("helmet");
 
 require(`dotenv`).config();
 
@@ -29,22 +30,71 @@ mongoose.connect(process.env.MONGOOSE_CONNECTION)
     .catch((err) => console.error(`Could not connect to MongoDB...`, err));
 
 const movieSchema = new mongoose.Schema({
-    name: String,
+    name: {
+        type: String,
+        required: true 
+    },
     genre: String,
     director: String,
-    tags: [ String ],
+    tags: {
+        type: Array
+        validate: {
+            validator: function(v) {
+                return v && v.length > 0;
+            }
+        }
+    },
     isPublished: Boolean
 });
 
 const Movie = mongoose.model(`Movie`, movieSchema);
 
-const movie = new Movie({
-    name: `Dune`,
-    genre: `Scifi`,
-    director: `Denis Villeneuve`,
-    tags: [`sand`, `worm`, `spice`, `Timothee Chalamet`, `Zendaya`, `Oscar Isaac`, `Jason Momoa`, `Dave Bautista`, `Stellan Skarsgard`],
-    isPublished: true
-});
+
+async function createMovie(){
+
+    const movie = new Movie({
+        //name: `Foxtrot`,
+        genre: `Drama`,
+        director: `Samuel Maoz`,
+        tags: [`Israel`, `family`, `IDF`, `checkpoint`, `son`, `death`, `Lior Ashkenazi`, `Sarah Adler`, `Yonathan Shiray`],
+        isPublished: true
+    });
+
+    try {
+        const result = await movie.save();
+        console.log(result);
+    }
+    catch(ex) {
+        console.log(ex);
+    };
+}
+
+createMovie();
+
+
+async function getMovies() {
+    const movies = await Movie
+        .find({tags: `spider`})
+        .limit(10)
+        .sort({ name: 1 })
+        .select({ name: 1, genre: 1, director: 1 });
+    console.log(movies);
+};
+
+//getMovies();
+
+async function updateMovie(id) {
+    const movie = await Movie.findById(id);
+    if(!movie) return;
+
+    movie.name = `Enemy`;
+
+    const result = await movie.save();
+
+    console.log(result);
+};
+
+//updateMovie(`61195834bafc0718f0edc121`);
 
 //Listen
 const appPort = process.env.PORT || 3000;
