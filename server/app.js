@@ -34,14 +34,19 @@ const movieSchema = new mongoose.Schema({
         type: String,
         required: true 
     },
-    genre: String,
-    director: String,
+    genre: {
+        type: String
+    },
+    director: {
+        type: String
+    },
     tags: {
-        type: Array
+        type: Array,
         validate: {
             validator: function(v) {
                 return v && v.length > 0;
-            }
+            },
+        message: `Movies must have at least 1 tag`
         }
     },
     isPublished: Boolean
@@ -56,7 +61,7 @@ async function createMovie(){
         //name: `Foxtrot`,
         genre: `Drama`,
         director: `Samuel Maoz`,
-        tags: [`Israel`, `family`, `IDF`, `checkpoint`, `son`, `death`, `Lior Ashkenazi`, `Sarah Adler`, `Yonathan Shiray`],
+        tags: [],
         isPublished: true
     });
 
@@ -65,7 +70,7 @@ async function createMovie(){
         console.log(result);
     }
     catch(ex) {
-        console.log(ex);
+        console.log(ex.errors);
     };
 }
 
