@@ -5,7 +5,7 @@ const morgan = require(`morgan`);
 const mongoose = require(`mongoose`);
 const app = express();
 const startupDebugger = require(`debug`)(`app:startup`);
-const genres = require(`./routes/genres`);
+const movies = require(`./routes/movies`);
 const { boolean } = require("joi");
 const { permittedCrossDomainPolicies } = require("helmet");
 
@@ -22,39 +22,13 @@ if(process.env.NODE_ENV === `development`){
     startupDebugger(`Morgan Enabled...`);
 }
 app.use(morgan(`tiny`));
-app.use(`/api/genres`, genres);
+app.use(`/`, movies);
 
 //DB Connect
 mongoose.connect(process.env.MONGOOSE_CONNECTION)
     .then(() => console.log(`Connected to MongoDB...`))
     .catch((err) => console.error(`Could not connect to MongoDB...`, err));
-
-const movieSchema = new mongoose.Schema({
-    name: {
-        type: String,
-        required: true 
-    },
-    genre: {
-        type: String
-    },
-    director: {
-        type: String
-    },
-    tags: {
-        type: Array,
-        validate: {
-            validator: function(v) {
-                return v && v.length > 0;
-            },
-        message: `Movies must have at least 1 tag`
-        }
-    },
-    isPublished: Boolean
-});
-
-const Movie = mongoose.model(`Movie`, movieSchema);
-
-
+/*
 async function createMovie(){
 
     const movie = new Movie({
@@ -74,7 +48,7 @@ async function createMovie(){
     };
 }
 
-createMovie();
+//createMovie();
 
 
 async function getMovies() {
@@ -100,7 +74,7 @@ async function updateMovie(id) {
 };
 
 //updateMovie(`61195834bafc0718f0edc121`);
-
+*/
 //Listen
 const appPort = process.env.PORT || 3000;
 app.listen(appPort, function(){
