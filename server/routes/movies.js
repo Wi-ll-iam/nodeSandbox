@@ -36,12 +36,18 @@ function validateMovieName(valObj){
             name: Joi.string().min(3).max(20).required(),
             genre: Joi.string(),
             director: Joi.string(),
-            tags: Joi.array().required()
+            tags: Joi.array()
         }
     );
     console.log(schema.validate(valObj));
     return schema.validate(valObj);
 };
+
+
+//Test
+router.post(`/`, async (req, res) => {
+    res.send(req.body);
+});
 
 //HTTPGet all Movies
 router.get(`/api/movies`, async (req, res) => {
@@ -69,15 +75,14 @@ router.get(`/api/movies/:id`, async (req, res) => {
 });
 
 //HTTPPost movie
-router.post(`/api/movies`, async function(req, res){
+router.post(`/api/movies`, async (req, res) => {
     //Validate
     const validation = validateMovieName(req.body);
     if(validation.error){
         res.status(400).send(`Bad request`);
         return;
     };
-    
-    let movie = new Movie({
+    const movie = new Movie({
         _id: await mongoose.Types.ObjectId(),
         name: req.body.name,
         genre: req.body.genre,
@@ -97,26 +102,32 @@ router.post(`/api/movies`, async function(req, res){
 });
 
 //HTTPPut
-router.put(`/:id`, function(req, res){
-        //404
-        const foundGenre = genresArray.find(i => i.id === parseInt(req.params.id));
-        if(!foundGenre){
-            res.status(404).send(`Genre with given id not found.`);
-            return;
-        };
+router.put(`/api/movies/:id`, async (req, res) => {
+        //Validate
+    const validation = validateMovieName(req.body);
+    if(validation.error){
+        res.status(400).send(`Bad request`);
+        return;
+    };
 
-        //400
-        let validation = validateMovieName(req.body);
-        if(validation.error){
-            res.status(400).send(`Genre name invalid.`);
-            return;
-        };
-        
-        //Put
-        foundGenre.name = req.body.name;
+    const movie = await Movie.findById(req.params.id)
+    .then()
+    .catch(err => {
+        res.status(404).send(`Record not found.\n` + err.message);
+        return;
+    });
 
-        //Send
-        res.send(foundGenre);
+    movie.set(res.body);
+
+    await movie
+    .save()
+    .then(result => {
+        res.status(200).send(result);
+    })
+    .catch(err => {
+        res.status(500).send(`Internal server error.\n` + err.message);
+        return;
+    });
 });
 
 //HTTPDelete
