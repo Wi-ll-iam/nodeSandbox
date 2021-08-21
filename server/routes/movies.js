@@ -45,11 +45,13 @@ function validateMovieName(valObj){
 
 
 //Test
-router.post(`/`, async (req, res) => {
-    res.send(req.body);
+router.post(`/`, (req, res) => {
+    console.log(`test`);
+    console.log(req.body);
+    res.send(req);
 });
 
-//HTTPGet all Movies
+//HTTP get all Movies
 router.get(`/api/movies`, async (req, res) => {
     await Movie.find()
         .then(result => {
@@ -61,7 +63,7 @@ router.get(`/api/movies`, async (req, res) => {
         });
 });
 
-//HTTPGet specific movie
+//HTTP get specific movie
 router.get(`/api/movies/:id`, async (req, res) => {
     await Movie.findById(req.params.id)
         .then(result => {
@@ -74,7 +76,7 @@ router.get(`/api/movies/:id`, async (req, res) => {
         });
 });
 
-//HTTPPost movie
+//HTTP post movie
 router.post(`/api/movies`, async (req, res) => {
     //Validate
     const validation = validateMovieName(req.body);
@@ -101,9 +103,8 @@ router.post(`/api/movies`, async (req, res) => {
         });
 });
 
-//HTTPPut
+//HTTP put movie
 router.put(`/api/movies/:id`, async (req, res) => {
-        //Validate
     const validation = validateMovieName(req.body);
     if(validation.error){
         res.status(400).send(`Bad request`);
@@ -111,40 +112,40 @@ router.put(`/api/movies/:id`, async (req, res) => {
     };
 
     const movie = await Movie.findById(req.params.id)
-    .then()
-    .catch(err => {
-        res.status(404).send(`Record not found.\n` + err.message);
-        return;
+        .then()
+        .catch(err => {
+            res.status(404).send(`Record not found.\n` + err.message);
+            return;
+        });
+    movie.set({
+        name: req.body.name,
+        genre: req.body.genre,
+        director: req.body.director,
+        tags: req.body.tags
     });
-
-    movie.set(res.body);
-
     await movie
-    .save()
-    .then(result => {
-        res.status(200).send(result);
-    })
-    .catch(err => {
-        res.status(500).send(`Internal server error.\n` + err.message);
-        return;
-    });
+        .save()
+        .then(result => {
+            res.status(200).send(result);
+            return;
+        })
+        .catch(err => {
+            res.status(500).send(`Internal server error.\n` + err.message);
+            return;
+        });
 });
 
 //HTTPDelete
-router.delete(`/:id`, function(req, res){
-    //404
-    const foundGenre = genresArray.find(i => i.id === parseInt(req.params.id));
-    if(!foundGenre){
-        res.status(404).send(`Genre with given id not found.`);
-        return;
-    };
-    
-    //Delete
-    deleteIndex = genresArray.indexOf(foundGenre);
-    genresArray.splice(deleteIndex, 1);
-
-    //Send
-    res.send(genresArray);
+router.delete(`/api/movies/:id`, async (req, res) => {
+    await Movie.deleteOne({ _id: req.params.id })
+        .then(result => {
+            res.status(202).send(result);
+            return;
+        })
+        .catch(er => {
+            res.status(404).send(`Record not found.\n` + err.message);
+            return;
+        });
 });
 
 module.exports = router;

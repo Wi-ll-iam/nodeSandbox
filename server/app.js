@@ -1,26 +1,26 @@
 const express = require(`express`);
 const Joi = require(`joi`);
-const helmet = require(`helmet`);
-const morgan = require(`morgan`);
+//const helmet = require(`helmet`);
+//const morgan = require(`morgan`);
 const mongoose = require(`mongoose`);
 const app = express();
-const startupDebugger = require(`debug`)(`app:startup`);
+//const startupDebugger = require(`debug`)(`app:startup`);
 const movies = require(`./routes/movies`);
 const { boolean } = require("joi");
-const { permittedCrossDomainPolicies } = require("helmet");
+//const { permittedCrossDomainPolicies } = require("helmet");
 
 require(`dotenv`).config();
 
-app.set('view engine', 'ejs');
-app.set(`views`, `./private/views`);
+//app.set('view engine', 'ejs');
+//app.set(`views`, `./private/views`);
 
 app.use(express.json());
-app.use(helmet());
+//app.use(helmet());
 if(process.env.NODE_ENV === `development`){
-    app.use(morgan(`tiny`));
-    startupDebugger(`Morgan Enabled...`);
+    //app.use(morgan(`tiny`));
+    //startupDebugger(`Morgan Enabled...`);
 }
-app.use(morgan(`tiny`));
+//app.use(morgan(`tiny`));
 app.use(`/`, movies);
 
 //DB Connect
